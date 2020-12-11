@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mr-bytes
+  labels:
+    role: passenger
+    name: mr-bytes
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+        name: mr-bytes
+  template:
+    metadata: 
+      labels:
+        name: mr-bytes
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: class
+                operator: In
+                values:
+                - business           
+      containers:
+        - name: mr-bytes
+          image: "busybox:1"
+          command:
+            - sleep
+            - "7200"
+
+---
+
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: mr-subscribe
+      labels:
+        role: passenger
+        name: mr-subscribe
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+            name: mr-subscribe
+      template:
+        metadata: 
+          labels:
+            name: mr-subscribe
+        spec:
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                  - key: name
+                    operator: In
+                    values:
+                    - mr-bytes
+                topologyKey: kubernetes.io/hostname
+          containers:
+            - name: mr-bytes
+              image: "busybox:1"
+              command:
+                - sleep
+                - "7200"
