@@ -18,12 +18,13 @@ spec:
       affinity:
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: class
-                operator: In
-                values:
-                - business           
+            - weight: 1
+              preference: 
+                matchExpressions:
+                - key: class
+                  operator: In
+                  values:
+                  - business           
       containers:
         - name: mr-bytes
           image: "busybox:1"
