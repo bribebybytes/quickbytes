@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: terminator
+  labels:
+    app: terminator
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+        maxUnavailable: 1
+  selector:
+    matchLabels:
+        app: terminator
+  template:
+    metadata: 
+      labels:
+        app: terminator
+    spec:
+      containers:
+        - name: terminator
+          image: "busybox:1"
+          command:
+            - sleep
+            - "3600"
+          imagePullPolicy: IfNotPresent

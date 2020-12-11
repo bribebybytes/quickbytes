@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ds-myth-worker2
+  labels:
+    app: ds-myth
+spec:
+  selector:
+    matchLabels:
+        app: ds-myth
+  template:
+    metadata: 
+      labels:
+        app: ds-myth
+    spec:
+        nodeSelector:
+          name: worker2
+        containers:
+        - name: logs
+          image: "busybox:1"
+          command:
+                - sleep
+                - "3600"
+          imagePullPolicy: IfNotPresent

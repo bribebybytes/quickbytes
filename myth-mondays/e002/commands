@@ -1,0 +1,3 @@
+kubectl apply -f emptydir-mem.yaml
+kubectl exec -i empty-dir sh
+df -h

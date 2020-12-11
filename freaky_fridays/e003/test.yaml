@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mr-bribe
+  labels:
+    role: passenger
+    name: mr-bribe
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+        name: mr-bribe
+  template:
+    metadata: 
+      labels:
+        name: mr-bribe
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: class
+                  operator: In
+                  values:
+                  - economy
+                - key: exitdoors
+                  operator: In
+                  values:
+                  - present                 
+      containers:
+        - name: mr-bribe
+          image: "busybox:1"
+          command:
+            - sleep
+            - "7200"

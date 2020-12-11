@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    purpose: volume-demo
+  name: empty-dir
+spec:
+  volumes:
+     - name: common-storage
+       emptyDir:
+        medium: Memory  
+  containers:
+  - name: container-1
+    image: "busybox:1"
+    volumeMounts:
+     - mountPath: /cache-pro
+       name: common-storage
+    args:
+      - /bin/sh
+      - -c
+      - touch /cache-pro/dates.txt; while true; do sleep 10 ; echo "container-1">>/cache-pro/dates.txt; date>>/cache-pro/dates.txt; done
+ 

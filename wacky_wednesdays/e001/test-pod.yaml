@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: test-pod
+  name: test-pod
+spec:
+  containers:
+  - name: test-pod
+    image: "busybox:1"
+    command:
+      - sleep
+      - "3600"
+    imagePullPolicy: IfNotPresent

@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mr-bribe
+  labels:
+    role: passenger
+    name: mr-bribe
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+        name: mr-bribe
+  template:
+    metadata: 
+      labels:
+        name: mr-bribe
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: class
+                operator: In
+                values:
+                - economy           
+              - key: exitdoors
+                operator: In
+                values:
+                - present
+      containers:
+        - name: mr-bribe
+          image: "busybox:1"
+          command:
+            - sleep
+            - "7200"
+
+---
+
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: mr-by
+      labels:
+        role: passenger
+        name: mr-by
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+            name: mr-by
+      template:
+        metadata: 
+          labels:
+            name: mr-by
+        spec:
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: class
+                    operator: In
+                    values:
+                    - economy
+                  - key: exitdoors
+                    operator: In
+                    values:
+                    - present
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                  - key: name
+                    operator: In
+                    values:
+                    - mr-bribe
+                topologyKey: kubernetes.io/hostname
+          containers:
+            - name: mr-by
+              image: "busybox:1"
+              command:
+                - sleep
+                - "7200"

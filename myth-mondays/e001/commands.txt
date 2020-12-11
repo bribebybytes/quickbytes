@@ -1,0 +1,22 @@
+kind delete cluster --name quick-bytes
+
+
+kind create cluster --name quick-bytes --config HA-config.yaml
+
+
+#Add Labels
+kubectl label nodes quick-bytes-worker  name=worker
+kubectl label nodes quick-bytes-worker2 name=worker2
+
+
+#Remove Labels
+kubectl label nodes quick-bytes-worker  name-
+kubectl label nodes quick-bytes-worker2 name-
+
+  nodeSelector:
+    name: worker2
+
+
+# Others
+cd /c/Users/naray/00_src/kind-example/k8bit
+kubectl proxy --www=.
