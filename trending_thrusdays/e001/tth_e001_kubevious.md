@@ -11,7 +11,7 @@ Before we jump, we already discussed multiple GUIs in our channel
 
 What is your favourite IDE or GUI or Dashboard when it comes to Kubernetes, Comment that below and lets discuss about it.
 
-Today we are going to see about Kubevious that takes, not so obvious approach of also analysing your cluster for missing best practices and over that you can configure your own organization policies to enforce, sounds cool right. Stay till the end of this video I am going to explain every bit of it in detail.
+Today we are going to see about Kubevious, this IDE, takes not so obvious approach with features like analysing your cluster for missing best practices and over that you can configure your own organization policies to enforce, sounds cool right. Stay till the end of this video I am going to explain every bit of it in detail.
 
 sudo vi /lib/systemd/system/code-server@.service
 sudo systemctl restart code-server@narayanan_kmu.service
