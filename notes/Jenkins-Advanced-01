@@ -1,0 +1,59 @@
+running jenkins on docker container :-
+
+
+-> install jdk11
+-> install docker and start the service
+-> sudo docker network create jenkins
+d110dd40b5e46029d188047d4b1d8af4a1d0d8c55d89b200d0e2223dbc2a19ac
+
+docker run --name jenkins-docker --rm --detach \
+  --privileged --network jenkins --network-alias docker \
+  --env DOCKER_TLS_CERTDIR=/certs \
+  --volume jenkins-docker-certs:/certs/client \
+  --volume jenkins-data:/var/jenkins_home \
+  --publish 2376:2376 docker:dind
+  
+-> 
+FROM jenkins/jenkins:2.263.2-lts-jdk11
+USER root
+RUN apt-get update && apt-get install -y apt-transport-https \
+       ca-certificates curl gnupg2 \
+       software-properties-common
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+RUN apt-key fingerprint 0EBFCD88
+RUN add-apt-repository \
+       "deb [arch=amd64] https://download.docker.com/linux/debian \
+       $(lsb_release -cs) stable"
+RUN apt-get update && apt-get install -y docker-ce-cli
+USER jenkins
+RUN jenkins-plugin-cli --plugins blueocean:1.24.3
+
+-> sudo docker build -t dockerized-jenkins-bbb:1.0 .
+
+
+docker run \
+  --name jenkins-bribebybytes \
+  --rm \
+  --detach \
+  --network jenkins \
+  --env DOCKER_HOST=tcp://docker:2376 \
+  --env DOCKER_CERT_PATH=/certs/client \
+  --env DOCKER_TLS_VERIFY=1 \
+  --publish 8080:8080 \
+  --publish 50000:50000 \
+  --volume jenkins-data:/var/jenkins_home \
+  --volume jenkins-docker-certs:/certs/client:ro \
+  dockerized-jenkins-bbb:1.0 
+  
+  
+Security :-
+---------------
+
+Hey Everyone, welcome back to Bribe By Bytes. This is the first video in the Jenkins Advanced series. In the basics series, we saw simple installation of Jenkins, the complete CI flow with github, sonar and junit .., later
+we saw about the CD part by deploying a war file on tomcat server. You can click the above link to check it out.
+
+In this advanced series, we are going to start exploring jenkins more with real-time scenarios. And the most important aspect for not only Jenkins but to any other tool that we manage is SECUIRTY. So, let's have a look
+at some of the best practices. This is Rajesh, and you are watching ....
+
+
+The most important task of managing your jenkins server is keeping it secure
