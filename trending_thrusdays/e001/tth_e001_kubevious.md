@@ -1,6 +1,6 @@
 Complexity in managing containers brings us the need for an Orchestrator. One well-known production grade container Orchestrator is Kubernetes. Soon after playing with all the YAML manifests to define and refine your clusters, you realize a need for an easy use Graphical User Interface or GUI to get a glance through your cluster. 
-Both you operations and developer teams needs an easy way to look through the complex setup that has been put in place. 
-The first option everyone see is Kubernetes Dashboard that ships with Kubernetes, soon after setting up and using it we realize its complex to secure and expose it to all users in our organization. If you have succeeded using Kubernetes Default Dashboard, comment below, I would like to know how you made that work for you. But most of the you start looking for alternatives.
+Both operations and developer teams needs an easy way to look through the complex setup that has been put in place. 
+The first option everyone see is Kubernetes Dashboard that ships with Kubernetes, soon after setting up and using it we realize its complex to secure and difficult to expose it to all users in our organization. If you have succeeded using Kubernetes Default Dashboard, comment below, I would like to know how you made that work for you. But most of us start looking for alternatives.
 Imagine a GUI over kubernetes that can easily shows all your resources in an appealing interface and not only that it also warns you if you are missing some best practices. Sounds interesting? Welcome to Kubevious - the obvious GUI for Kubernetes.
 This is NarainKrishh and you are watching..
 
@@ -19,7 +19,7 @@ Today we are going to see about Kubevious, this IDE, takes not so obvious approa
 - Configuration validations
 - Capacity planning and list goes on.
 
- Stay till the end of this video, I am going to explain starting from setup and going to end it with where it can help you in you day to day activities, and dont forget to share with your friends and colleage circle.
+ Stay till the end of this video, I am going to explain starting from setup and going to end it with where it can help you in your day to day activities, and dont forget to share this with your friends and colleages.
 
 
 
@@ -33,14 +33,14 @@ helm upgrade --atomic -i kubevious kubevious/kubevious -n kubevious
 ```
 
 Now that kubevious is running your cluster
-Quick way to view is to use kubectl proxy to expose it. You can also create kubernetes ingress if you will like to.
+Quick way to access is to use kubectl port-forward to expose it. You can also create kubernetes ingress if you will like to.
 
 ```
 kubectl get pods -n kubevious -l "app.kubernetes.io/component=kubevious-ui" -o jsonpath="{.items[0].metadata.name}
 kubectl port-forward <<<pod name from above>> 8080:80 -n kubevious  
 ```
 
-Just for demonstration I am going to deploy argocd, which is kubernetes native CI/CD tool that runs within kubernetes cluster, with lots of related to components, I think it can help us understand kubevious features better. Pls note I could have taken any application that runs in kubernetes for this example.
+Just for demonstration I am going to deploy argocd, which is kubernetes native CI/CD tool that runs within kubernetes cluster, with lots of related components, I think it can help us understand kubevious features better. Pls note I could have taken any application that runs in kubernetes for this example.
 
 So let me quickly install argo cd
 
@@ -51,7 +51,7 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/st
 
 Now that argocd is installed, lets open our kubervious IDE to check it.
 
-### Search your cluster like never before:
+### Search your cluster like never before
 Very first amazing feature you will notice, is this text based feature. You can basically search with any text and it will list all the resource from the cluster that matches your text in some way.
 Lets say i want to looks for resources using port 8080 and then I can filter the resource that I am interested in, say for example I am selecting service. Now you can see it shows two resources one from ArgoCD and other from kube-system.
 You can further use other filters like labels, annotations, just resources with errors or warnings and kubevious specific markers like high-memory-user etc. I will explain about in a while in this video.
@@ -64,7 +64,7 @@ And then Infrastructure Summary listing nodes in your cluster, volumes used, ove
 Coming back, if you scroll down it immediately lists the top namespaces with issues, Kubevious identifies many configuration errors, such as misuse of labels, missing ports, and others. I will show you some examples shortly.
 
 ### Impact Radius Analysis
-As we know in Kubernetes you can share and reuse configuration. Imagine this scenario, wait you dont have to imagine, it happens all the time. We try to change a config without knowing all the places it is being referred. Thanks to Kubevious, it can show you all the impacted components based on the config you choose. I am navigating to dnsmasq config file, we can see this small "Sharing" marker next to the configfail. and I can see in the properties window that it is also shared by kube-dns.
+As we know in Kubernetes you can share and reuse configuration. Imagine this scenario, wait you dont have to imagine, it happens all the time. We try to change a config without knowing all the places it is being referred. Thanks to Kubevious, it can show you all the impacted components based on the config you choose. I am navigating to dnsmasq config file, we can see this small "Sharing" marker next to the configmap. and I can see in the properties window that it is also shared by kube-dns.
 This way you know modifying this config will also impact kube-dns.
 
 ### Time Machine is here
@@ -75,7 +75,7 @@ Heading back on kubevious we can immediately see, it has the updated config and 
 It is not just that, the main functionality is here in this timeline tab. You will have to activate timemachine by clicking here. Now you have the ability to go back in time and see what config was present at that time. By going back in the timeline you can see port was 8082 before I chnaged it and there is no warning at that time. So I can take action rightaway to fix my changes. 
 
 ### Configuration validations with custom rules support
-I just showed you one validation Kubevious did for us when we gave a wrong port number in our service configuration. But thats just one check, Kubevious comes with some additional checks out of the box. Each of those configuration validations will give warnings in respective resources. Lets find some critical validation errors, in Kube-System we can notice 4 critical errors and 2 warnings displayed. If I drilldown, I can see its under rawconfigs and lets check this Cluster Role Binding. Kubevious identifies that for this cluster-role-binding there is no linked service account. Cool right.
+I just showed you one validation Kubevious did for us when we gave a wrong port number in our service configuration. But thats just one check, Kubevious comes with some additional checks out of the box. Each of those configuration validations will give warnings in respective resources. Lets find some critical validation errors, in Kube-System we can notice 4 critical errors and lots of warnings displayed. If I drilldown, I can see its under rawconfigs and lets check this Cluster Role Binding. Kubevious identifies that for this cluster-role-binding there is no linked service account. Cool right.
 While navigating you would have noticed that there are other markers here. Lets quickly understand them - 
 The Rook Icon, represents that this is a large namespace
 The Spy Icon, resprents that this resource has got over kubernetes API access outside its namespace
